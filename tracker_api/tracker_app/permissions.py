@@ -21,9 +21,6 @@ class ProjectPermissions(BasePermission):
 class ListPermissions(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_authenticated
-        # change
-        # user1 = User.objects.get(username=request.user.username)
-        # return request.user in user1.project.members.all()
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
             return request.user in obj.project_list.members.all() or request.user==obj.project_list.creator or request.user.is_admin or request.user.is_superuser
@@ -37,3 +34,11 @@ class CardPermissions(BasePermission):
         if request.method in SAFE_METHODS:
             return request.user in obj.assignee.all() or request.user==obj.project_card.creator or request.user.is_admin or request.user.is_superuser
         return request.user.is_admin or request.user.is_superuser or request.user==obj.project_card.creator 
+
+class ChecklistPermissions(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return request.user==obj.assignee_card.assignee
+
+class CardCommentPermissions(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return request.user==obj.assignee_card.assignee

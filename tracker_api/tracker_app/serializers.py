@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+from rest_framework_jwt.settings import api_settings
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
